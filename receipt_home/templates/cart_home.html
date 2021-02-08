@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block head_title %}- Receipt Home {% endblock %}
+
+{% block page_content %}
+<!-- Enter Asserts -->
+<section class=" animatedParent animateOnce">
+    <div class="container padding-bottom-none">
+        <div class="section-content">
+            <div class="row">
+
+                <div class=" col-md-6 bg-f8 padding-tb margin-bottom-80 animated fadeInRightShort slow delay-500">
+                    <div class="booking-from">
+                        <h2>Issue<span class="color-defult"> Receipt</span></h2>
+                        <div class="border-style-2 margin-bottom-30"></div>
+                        <p class="margin-bottom-30">Enter Expenses</p>
+                        <form method="post" id="get_expenses_form" action="#">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" name="product_query" class="btn-check" id="test_medic"
+                                            autocomplete="off" onclick="handle_radio_click(this);" checked>
+                                        <label for="test_medic">Test | Drug</label>
+                                        <input type="radio" name="product_query" class="btn-check" id="treatment"
+                                            autocomplete="off" onclick="handle_radio_click(this);">
+                                        <label for="treatment">Treatment</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <input type="text" name="name" id="product_purchased" class="form-control"
+                                        placeholder="Enter Test" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="contact-textarea">
+                                        <button class="btn btn-theme" type="submit" value="Submit Form">Add to
+                                            Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="quantity">QTY</th>
+                                <th class="product">Product</th>
+                                <th class="amount">Subtotal</th>
+                                <th class="amount">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <div class="panel-body text-right" hidden>
+                        <button style="border-radius: 7px;" class="menu-shop-btn-danger">Clear Cart</button>
+                        <button style="border-radius: 7px;" class="menu-shop-btn">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- Assets end -->
+{% endblock page_content %}
+
+{% block javascript %}
+<script>
+    let drugs_arry_finali = []
+    let prescription_arry_finali = []
+    // let drugs_arry_finali_table = []
+    // let drugs_arry = []
+    // let prescription_arry = []
+
+    function handle_radio_click(product_query) {
+        if (document.getElementById('test_medic').checked) {
+            document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Test or Drug')
+
+        }
+        if (document.getElementById('treatment').checked) {
+            document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Medication')
+        }
+    }
+
+    function get_drugs() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (content) {
+                if (content.data) {
+                    let arr = []
+                    arr.length = 0;
+                    for (var i in JSON.parse(content.drugs)) {
+                        arr.push(JSON.parse(content.drugs)[i][0])
+                    }
+                    drugs_arry_finali = arr
+                }
+            }
+        });
+    }
+
+    // get_drugs();
+
+    function get_pres() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_prescription_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (content) {
+                if (content.data) {
+                    let arr = []
+                    arr.length = 0;
+                    for (var i in JSON.parse(content.prescription)) {
+                        arr.push(JSON.parse(content.prescription)[i][0])
+                    }
+                    prescription_arry_finali = arr
+                }
+            }
+        });
+    }
+
+
+    $('#get_expenses_form').submit(function (e) {
+        e.preventDefault()
+        var product = $("#product_purchased").val()
+        var drug_test = ''
+        if (document.getElementById('test_medic').checked) {
+            drug_test = 'test_medic';
+
+        }
+        if (document.getElementById('treatment').checked) {
+            drug_test = 'medication'
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_prescription_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                'drug_test': drug_test,
+                'product': product
+            },
+            success: function (content) {
+                if (content.data) {
+                    console.log('@@@@@@@@@@@@@@@2');
+                    console.log(JSON.parse(content.drug_test));
+                }
+            }
+        });
+
+    })
+
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    $('#product_purchased').focus(function () {
+        if (document.getElementById('test_medic').checked) {
+            get_drugs()
+            autocomplete(document.getElementById("product_purchased"), drugs_arry_finali);
+
+        }
+        if (document.getElementById('treatment').checked) {
+            get_pres()
+            autocomplete(document.getElementById("product_purchased"), prescription_arry_finali);
+        }
+    })
+    get_drugs()
+    get_pres()
+</script>
+
+{% endblock javascript %}

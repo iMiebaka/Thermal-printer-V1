@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block head_title %}- Profile {% endblock %}
+
+{% block page_content %}
+<!-- Enter Asserts -->
+<section class=" animatedParent animateOnce">
+    <div class="container padding-bottom-none entrance-center">
+        <div class="section-content">
+            <div class="row">
+                <!-- <div class="col-md-6">
+                    <img class="animated fadeInLeftShort slow delay-500 booking-cantact-img" src="img/bg/c1.png" alt="">
+                    </div> -->
+                <div class="bg-f8 padding-tb margin-bottom-80 animated fadeInRightShort slow delay-500">
+                    <div class="booking-from">
+                        <h2>PRO<span class="color-defult">FILE</span></h2>
+                        <div class="border-style-2 margin-bottom-30"></div>
+                        <!-- <p class="margin-bottom-30">Enter Username and Password to Signup</p> -->
+                        <form method="post" action="#">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="text" name="name" id="username" class="form-control"
+                                        placeholder="Username" required>
+                                </div>
+                                <div class="col-md-12 margin-bottom-20">
+                                    <div class="input-group">
+                                        <input type="password" id="pass" name="your_pass" class="form-control"
+                                            placeholder="Password" required>
+                                        <span class="input-group-btn"> <button type="button"
+                                                class="form-control form-control-lg btn btn-default reveal"> <span
+                                                    class="mx-1 icon-eye" id="password_symbol"></span>
+                                            </button></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <!-- <div class="contact-textarea"> -->
+                                    <button class="btn btn-theme" type="submit" value="Submit Form">Signup</button>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- appointment end -->
+{% endblock page_content %}
+
+{% block javascript %}
+<script>
+    $("#username").focus();
+    $(".reveal").on('click', function () {
+        var $pwd = $(".pwd");
+        var $symbol = $("#password_symbol")
+        if ($pwd.attr('type') === 'password') {
+            $pwd.attr('type', 'text');
+            $symbol.attr('class', 'mx-1 icon-visibility_off')
+        }
+        else {
+            $pwd.attr('type', 'password');
+            $symbol.attr('class', 'mx-1 icon-eye')
+        }
+    });
+</script>
+
+{% endblock javascript %}

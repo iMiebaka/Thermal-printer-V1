@@ -1,0 +1,1474 @@
+<!-- Counter start -->
+<!-- <section class="funfact-field over-layer-default" style="background-image: url('img/bg/6.jpg')">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-6">
+                    <div class="counter-col text-center">
+                        <div class="count">
+                            <div class="start-count">25</div>
+                            <h4>Heart Transplants</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-6">
+                    <div class="counter-col text-center">
+                        <div class="count">
+                            <div class="start-count">979</div>
+                            <h4>BARIATRIC SURGERY</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-6">
+                    <div class="counter-col text-center">
+                        <div class="count">
+                            <div class="start-count">5264</div>
+                            <h4>CRITICAL CARE</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-6">
+                    <div class="counter-col text-center">
+                        <div class="count">
+                            <div class="start-count border-none">119</div>
+                            <h4>EXTPART Doctor</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+<!-- Counter end -->
+{% extends "base.html" %}
+{% block head_title %}- Receipt History {% endblock %}
+
+{% block page_content %}
+<!-- Enter Asserts -->
+<section class=" animatedParent animateOnce">
+    <div class="container padding-bottom-none entrance-center">
+        <div class="section-content">
+            <div class="row">
+                <!-- <div class="col-md-6">
+                    <img class="animated fadeInLeftShort slow delay-500 booking-cantact-img" src="img/bg/c1.png" alt="">
+                    </div> -->
+                <div class="col-md-6 bg-f8 padding-tb margin-bottom-30 animated fadeInRightShort slow delay-500">
+                    <div class="booking-from">
+                        <h2> <span id="drug_test_header_one"> Add </span> <span class="color-defult" id="drug_test_header">drug</span></h2>
+                        <div class="border-style-2 margin-bottom-30"></div>
+                        <p class="margin-bottom-30"></p>
+                        <form id="add_drug_form" action="">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="hidden" name="c_s" id="c_s_drug_name" class="form-control">
+                                    <input type="text" name="drug" id="drug_name" class="form-control"
+                                        placeholder="Enter name of Drug" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" name="drug_amount" id="drug_amount" class="form-control"
+                                        placeholder="Enter Cost of Drug" min="1" required>
+                                </div>
+                                <div class="col-md-7" style="margin-bottom: 20px;">
+                                    <!-- <div class="contact-textarea"> -->
+                                    <input class="form-control" placeholder="Describe the drug (Optional)"
+                                        id="drug_description" name="drug_description">
+                                    <!-- </div> -->
+                                    <button class="btn btn-theme" type="submit" id="add_drug_button"
+                                        value="Submit Form">Add
+                                        Drug</button>
+                                </div>
+                                <div class="col-md-5" style="padding-top: 10px;">
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" name="product_query" class="btn-check" id="drug_name_insert"
+                                            autocomplete="off" onclick="handle_radio_click(this);" checked>
+                                        <label for="test">Drug</label>
+                                        <input type="radio" name="product_query" class="btn-check" id="test_name_insert"
+                                            autocomplete="off" onclick="handle_radio_click(this);">
+                                        <label for="treatment">Test</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="drugs_table">
+                            <thead>
+                                <tr>
+                                    <th class="product">S/C</th>
+                                    <th class="product">T/D</th>
+                                    <th class="product">Name</th>
+                                    <th class="amount">Subtotal</th>
+                                    <th class="amount">Edit</th>
+                                    <th class="amount">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="panel-body text-right" id="drug_display_table">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" oninput="search_for_drug_for_table()"
+                                        id="search_for_drug_for_table" placeholder="Find Drug">
+                                </div>
+                                <div class="col-md-6">
+                                    <span id="table_page_text" style="font-size: 20px;" class="margin-right-20"></span>
+                                    <input type="button" style="border-radius: 10px;" id="get_drug_previous"
+                                        onclick=get_drug_previous() class="menu-shop-btn col-md-2" disabled value="<<">
+                                    <input type="button" style="border-radius: 10px;" id="get_drug_next"
+                                        onclick=get_drug_next() class="menu-shop-btn col-md-2" value=">>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class=" animatedParent animateOnce">
+    <div class="container padding-bottom-none">
+        <div class="section-content">
+            <div class="row">
+                <div class=" col-md-6 bg-f8 padding-tb margin-bottom-20 animated fadeInRightShort slow delay-500">
+                    <div class="booking-from">
+                        <h2> Prescription <span class="color-defult">Options</span></h2>
+                        <div class="border-style-2 margin-bottom-30"></div>
+                        <p class="margin-bottom-10" id="pre_headline">Add Prescription</p>
+                        <div class="row">
+                            <div class="col-md-6 margin-bottom-10">
+                                <div class="contact-textarea">
+                                    <button class="btn btn-theme" onclick=medication_drug_sec_add()>
+                                        <span id="medication_drug_sec_default_add" class="icon-settings"></span>
+                                        <span id="medication_drug_sec_loading_add" class="icon-plus" hidden></span>
+                                    </button>
+
+                                    <button style="height: 44px; width: 65px;" id="medication_drug_sec_edit"
+                                        class="btn btn-blue" onclick=medication_drug_sec_edit()>
+                                        <div id="medication_drug_sec_default_edit">
+                                            <span class="icon-edit"></span>
+                                        </div>
+                                        <div id="medication_drug_sec_loading" hidden>
+                                            <div class="loader"></div>
+                                        </div>
+                                    </button>
+
+                                    <button type="submit" style="height: 44px; width: 65px;"
+                                        id="medication_drug_sec_delete" class="btn btn-danger"
+                                        onclick=medication_drug_sec_delete()>
+                                        <div id="medication_drug_sec_default_delete">
+                                            <span class="icon-trash-o"></span>
+                                        </div>
+                                        <div id="medication_drug_sec_loading" hidden>
+                                            <div class="loader"></div>
+                                        </div>
+                                    </button>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <select name="medication_drug_form_select" id="medication_drug_form_select"
+                                    class="form-control" style="height: 45px;" disabled>
+                                    <option value="" disabled selected>Select Prescription to modify
+                                    </option>
+                                    {% for illment in illments %}
+                                    <option value="{{illment.name}}">{{illment.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- </div>  -->
+                            <div id="medication_drug_form_add">
+                                <form action="" id="medication_drug_form" autocomplete="off" class="autocomplete">
+                                    <div class="col-md-12">
+                                        <input type="text" name="illness" id="illness" class="form-control"
+                                            placeholder="Enter Illness" required>
+                                    </div>
+                                    <!-- <div class="col-md-12"> -->
+                                    <div class="col-md-8">
+                                        <input type="text" name="drug-search" id="drug-search" class="form-control"
+                                            placeholder="Search for Drug" required>
+                                    </div>
+                                    <div class="col-md-4" style="padding-bottom: 8px;">
+                                        <input type="number" id="drug-pre-amount" class="form-control"
+                                            placeholder="Enter Amount" value="1" min="1" required>
+                                    </div>
+                                    <!-- </div> -->
+                                    <div class="col-md-6">
+                                        <div class="contact-textarea">
+                                            <button class="btn btn-theme" id="medication_drug_sec">
+                                                <div id="medication_drug_sec_default">
+                                                    <span class="icon-plus"></span>
+                                                    <!-- Add to list -->
+                                                </div>
+                                                <div id="medication_drug_sec_loading" hidden>
+                                                    <div class="loader"></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="input-medication">
+                            <thead>
+                                <tr>
+                                    <th class="quantity">QTY</th>
+                                    <th class="product">Product</th>
+                                    <th class="subtotal">Subtotal</th>
+                                    <th class="amount">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <div class="panel-body text-right" id="medication_options" hidden>
+                            <input type="button" style="border-radius: 10px;" id="clear-medication-table"
+                                class="menu-shop-btn-danger" onclick=clear_pre_(); value="Clear All">
+                            <input type="button" style="border-radius: 10px;" id="save-medication-table"
+                                class="menu-shop-btn" onclick=save_pre(); value="Save">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+<!-- appointment end -->
+{% endblock page_content %}
+
+{% block javascript %}
+<script>
+    var update = false;
+    var update_drug_test = false;
+    var drug_test = 'Drug'
+    $("#medication_drug_sec_edit").attr("disabled", true);
+    $("#medication_drug_sec_delete").attr("disabled", true);
+    $("#medication_drug_form_select").attr("disabled", true);
+    function handle_radio_click(product_query) {
+        if (document.getElementById('drug_name_insert').checked) {
+            document.getElementById('drug_name').setAttribute('placeholder', 'Enter name of Drug')
+            document.getElementById('drug_amount').setAttribute('placeholder', 'Enter Cost of Drug')
+            document.getElementById('drug_description').setAttribute('placeholder', 'Describe the Drug (Optional)')
+            drug_test = 'Drug'
+            document.getElementById('drug_test_header').innerHTML = drug_test
+            if (update_drug === true) {
+                document.getElementById('add_drug_button').innerHTML = 'Update '+ drug_test
+                document.getElementById('drug_test_header_one').innerHTML = 'Update '
+            }
+            if (update_drug === false) {
+                document.getElementById('add_drug_button').innerHTML = 'Add ' + drug_test
+                document.getElementById('drug_test_header_one').innerHTML = 'Add '
+            }
+        }
+        if (document.getElementById('test_name_insert').checked) {
+            document.getElementById('drug_name').setAttribute('placeholder', 'Enter name of Test')
+            document.getElementById('drug_amount').setAttribute('placeholder', 'Enter Cost of Test')
+            document.getElementById('drug_description').setAttribute('placeholder', 'Describe the Test (Optional)')
+            drug_test = 'Test'
+            document.getElementById('drug_test_header').innerHTML = drug_test
+            if (update_drug === true) {
+                document.getElementById('add_drug_button').innerHTML = 'Update '+ drug_test
+                document.getElementById('drug_test_header_one').innerHTML = 'Update '
+            }
+            if (update_drug === false) {
+                document.getElementById('add_drug_button').innerHTML = 'Add ' + drug_test
+                document.getElementById('drug_test_header_one').innerHTML = 'Add '
+            }
+        }
+    }
+    function medication_drug_sec_add() {
+        if (document.getElementById('pre_headline').innerHTML === 'Modify Prescription') {
+            // console.log('Modify');
+            document.getElementById('illness').setAttribute('placeholder', 'Enter Illness')
+            document.getElementById('pre_headline').innerHTML = 'Add Prescription'
+            document.getElementById('save-medication-table').value = 'Save'
+            document.getElementById('clear-medication-table').value = 'Clear All'
+            $("#medication_drug_sec_edit").attr("disabled", true);
+            $("#medication_drug_sec_delete").attr("disabled", true);
+            $("#illness").removeAttr("disabled");
+            // $("#medication_drug_form_mod").attr("hidden", true);
+            // $("#medication_drug_form_add").removeAttr("hidden");
+            // $("#illness").removeAttr("disabled");
+            $("#medication_drug_form_select").attr("disabled", true);
+            $("#medication_drug_sec_loading_add").attr("hidden", true);
+            $("#medication_drug_sec_default_add").removeAttr("hidden");
+            update = false
+            clear_pre();
+        }
+        else {
+            document.getElementById('illness').setAttribute('placeholder', 'Select medication to modify')
+            document.getElementById('pre_headline').innerHTML = 'Modify Prescription'
+            document.getElementById('save-medication-table').value = 'Update'
+            document.getElementById('clear-medication-table').value = 'Delete'
+            $("#illness").attr("disabled", true);
+            $("#medication_drug_sec_edit").removeAttr("disabled");
+            $("#medication_drug_sec_delete").removeAttr("disabled");
+            $("#medication_drug_sec_default_add").attr("hidden", true);
+            $("#medication_drug_sec_loading_add").removeAttr("hidden");
+            // $("#medication_drug_form_mod").removeAttr("hidden");
+            // $("#medication_drug_form_mod_btn").attr("hidden", true);
+            // $("#medication_drug_form_add").attr("hidden", true);
+            $("#medication_drug_form_select").removeAttr("disabled");
+            update = true
+            clear_pre();
+        }
+    }
+
+    // function medication_drug_sec_edit() {
+    //     var ill = document.getElementById('medication_drug_form_select').value;
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '{% url "receipt_home:get_drugs_via_prescription_ajax" %}',
+    //         headers: {
+    //             'X-CSRFToken': '{{ csrf_token }}'
+    //         },
+    //         dataType: 'json',
+    //         data: {
+    //             illness: $('#medication_drug_form_select').val().trim()
+    //         },
+    //         success: function (content) {
+    //             if (content.data) {
+    //                 var arr = JSON.parse(content.drugs);
+    //                 var btn_clear = "<button type='button' class='btn' onclick='productDelete(this)'>  <i class='icon-close'> </i> </button>";
+    //                 document.getElementById('illness').value = ill;
+    //                 $("#illness").attr("disabled", true);
+
+    //                 if ($('#input-medication tbody').length == 0) {
+    //                     $('#input-medication tbody').append("<tbody></tbody>");
+    //                     $("#medication_options").attr("hidden", true);
+    //                 }
+
+    //                 else {
+    //                     $("#medication_options").removeAttr("hidden");
+    //                 }
+
+    //                 if (document.getElementById("input-medication").rows.length > 1) {
+    //                     $("#medication_options").removeAttr("hidden");
+    //                 }
+
+    //                 if (document.getElementById("input-medication").rows.length >= 2) {
+    //                     $("#input-medication tr:last").remove();
+    //                 }
+
+    //                 // document.querySelectorAll("input-medicationtable tbody tr").forEach(function (e) { e.remove() })
+    //                 $("#input-medicationtable tbody tr").remove()
+    //                 product_qty = 0;
+    //                 product_total_cost = 0;
+
+    //                 for (var i in arr) {
+    //                     var amt = ''
+    //                     var drug_searched = ''
+    //                     var cost = ''
+    //                     var num = 0
+    //                     var total = 0
+    //                     var total_amt = 0
+    //                     for (var j in drugs_arry) {
+    //                         if (drugs_arry[j][0] === drug_searched) {
+    //                             num = drugs_arry[j][1];
+    //                         }
+    //                     }
+    //                     drug_searched = arr[i][0]
+    //                     amt = arr[i][2]
+    //                     cost = arr[i][1]
+    //                     // console.log(drug_searched + " " + cost + " " + amt);
+    //                     var sn_amt = (amt * cost)
+    //                     $('#input-medication tbody').append("<tr>" +
+    //                         "<td>" + amt + " x</td>" +
+    //                         "<td>" + drug_searched + "</td>" +
+    //                         "<td> ₦" + sn_amt + "</td>" +
+    //                         "<td>" + btn_clear + "</td>" +
+    //                         "</tr>"
+    //                     );
+    //                     product_qty = parseInt(product_qty) + parseInt(amt);
+    //                     product_total_cost = parseInt(product_total_cost) + parseInt(sn_amt);
+    //                 }
+
+    //                 $('#input-medication tbody').append("<tr>" +
+    //                     "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+    //                     // "<td></td>" +
+    //                     "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+    //                     "</tr>"
+    //                 );
+
+    //                 // $("#medication_options").removeAttr("hidden");
+    //             }
+    //             else {
+    //                 console.log(content.error);
+    //             }
+    //         }
+    //     });
+    // }
+
+
+    function medication_drug_sec_edit() {
+        var ill = document.getElementById('medication_drug_form_select').value;
+        $.ajax({
+            type: 'POST',
+            url: '{% url "receipt_home:get_drugs_via_prescription_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                illness: $('#medication_drug_form_select').val().trim()
+            },
+            success: function (content) {
+                if (content.data) {
+                    var arr = JSON.parse(content.drugs);
+                    var btn_clear = "<button type='button' class='btn' onclick='productDelete(this)'>  <i class='icon-close'> </i> </button>";
+                    document.getElementById('illness').value = ill;
+                    $("#illness").attr("disabled", true);
+                    $('#input-medication tbody tr').remove()
+                    if ($('#input-medication tbody').length == 0) {
+                        $('#input-medication tbody').append("<tbody></tbody>");
+                        $("#medication_options").attr("hidden", true);
+                    }
+
+                    else {
+                        $("#medication_options").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("input-medication").rows.length > 1) {
+                        $("#medication_options").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("input-medication").rows.length >= 2) {
+                        $("#input-medication tr:last").remove();
+                    }
+
+                    // document.querySelectorAll("input-medicationtable tbody tr").forEach(function (e) { e.remove() })
+                    $("#input-medicationtable tbody tr").remove()
+                    product_qty = 0;
+                    product_total_cost = 0;
+
+                    for (var i in arr) {
+                        var amt = ''
+                        var drug_searched = ''
+                        var cost = ''
+                        var num = 0
+                        var total = 0
+                        var total_amt = 0
+                        for (var j in drugs_arry) {
+                            if (drugs_arry[j][0] === drug_searched) {
+                                num = drugs_arry[j][1];
+                            }
+                        }
+                        drug_searched = arr[i][0]
+                        amt = arr[i][2]
+                        cost = arr[i][1]
+                        // console.log(drug_searched + " " + cost + " " + amt);
+                        var sn_amt = (amt * cost)
+                        $('#input-medication tbody').append("<tr>" +
+                            "<td>" + amt + " x</td>" +
+                            "<td>" + drug_searched + "</td>" +
+                            "<td> ₦" + sn_amt + "</td>" +
+                            "<td>" + btn_clear + "</td>" +
+                            "</tr>"
+                        );
+                        product_qty = parseInt(product_qty) + parseInt(amt);
+                        product_total_cost = parseInt(product_total_cost) + parseInt(sn_amt);
+                    }
+
+                    $('#input-medication tbody').append("<tr>" +
+                        "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+                        // "<td></td>" +
+                        "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                        "</tr>"
+                    );
+
+                    // $("#medication_options").removeAttr("hidden");
+                }
+                else {
+                    console.log(content.error);
+                }
+            }
+        });
+    }
+
+    var page_num = 1
+    function get_drug_next() {
+        page_num = page_num + 1
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_table_pagination_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                page: page_num,
+                drug_search: document.getElementById('search_for_drug_for_table').value,
+
+            },
+            success: function (content) {
+                if (content.data) {
+                    var arr = JSON.parse(content.drugs);
+                    // console.log(arr);
+                    document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+                    document.getElementById('get_drug_previous').setAttribute('class', 'menu-shop-btn')
+                    document.getElementById('get_drug_next').setAttribute('class', 'menu-shop-btn')
+                    var btn_edit = '<button type="button" onclick="edite_drug(this)" ; class="btn"> <i class="icon-edit"> </i> </button>'
+                    var btn_del = '<button type="button" onclick="delete_drug(this)" ; class="btn"> <i class="icon-close"> </i> </button>'
+                    if (page_num == content.total_page) {
+                        document.getElementById('get_drug_next').setAttribute('disabled', true)
+                        document.getElementById('get_drug_next').setAttribute('class', '')
+                        $('#get_drug_previous').removeAttr('disabled')
+                    }
+                    if (page_num == 1) {
+                        document.getElementById('get_drug_previous').setAttribute('disabled', true)
+                        document.getElementById('get_drug_previous').setAttribute('class', '')
+                        $('#get_drug_next').removeAttr('disabled')
+                    }
+
+                    if ($('#drugs_table tbody').length == 0) {
+                        $('#drugs_table tbody').append("<tbody></tbody>");
+                    }
+
+                    else {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length > 1) {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length >= 2) {
+                        $("#drugs_table tr:last").remove();
+                    }
+                    $('#drugs_table tbody tr').remove()
+                    for (var i in arr) {
+                        $('#drugs_table tbody').append("<tr>" +
+                            "<td>" + arr[i][3] + "</td>" +
+                            "<td>" + arr[i][4] + "</td>" +
+                            "<td class='product'><a>" + arr[i][0] + "</a> <span class='small'>" + arr[i][1] + "</span></td>" +
+                            "<td> ₦" + arr[i][2] + "</td>" +
+                            "<td>" + btn_edit + "</td>" +
+                            "<td>" + btn_del + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                }
+            }
+        })
+    }
+
+    function get_drug_previous() {
+        page_num = page_num - 1
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_table_pagination_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                page: page_num,
+                drug_search: document.getElementById('search_for_drug_for_table').value,
+
+            },
+            success: function (content) {
+                if (content.data) {
+                    var arr = JSON.parse(content.drugs);
+                    document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+                    document.getElementById('get_drug_previous').setAttribute('class', 'menu-shop-btn')
+                    document.getElementById('get_drug_next').setAttribute('class', 'menu-shop-btn')
+                    var btn_edit = '<button type="button" onclick="edite_drug(this)" ; class="btn"> <i class="icon-edit"> </i> </button>'
+                    var btn_del = '<button type="button" onclick="delete_drug(this)" ; class="btn"> <i class="icon-close"> </i> </button>'
+                    if (page_num == content.total_page) {
+                        document.getElementById('get_drug_next').setAttribute('disabled', true)
+                        document.getElementById('get_drug_next').setAttribute('class', '')
+                        $('#get_drug_previous').removeAttr('disabled')
+                    }
+                    if (page_num == 1) {
+                        document.getElementById('get_drug_previous').setAttribute('disabled', true)
+                        document.getElementById('get_drug_previous').setAttribute('class', '')
+                        $('#get_drug_next').removeAttr('disabled')
+                    }
+
+
+                    if ($('#drugs_table tbody').length == 0) {
+                        $('#drugs_table tbody').append("<tbody></tbody>");
+                    }
+
+
+                    else {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+
+                    if (document.getElementById("drugs_table").rows.length > 1) {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length >= 2) {
+                        $("#drugs_table tr:last").remove();
+                    }
+                    $('#drugs_table tbody tr').remove()
+                    for (var i in arr) {
+                        $('#drugs_table tbody').append("<tr>" +
+                            "<td>" + arr[i][3] + "</td>" +
+                            "<td>" + arr[i][4] + "</td>" +
+                            "<td class='product'><a>" + arr[i][0] + "</a> <span class='small'>" + arr[i][1] + "</span></td>" +
+                            "<td> ₦" + arr[i][2] + "</td>" +
+                            "<td class='amount'>" + btn_edit + "</td>" +
+                            "<td>" + btn_del + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                }
+            }
+        })
+    }
+
+
+    function get_drugs_table() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_table_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (content) {
+                if (content.data) {
+                    page_num = 1
+                    var arr = JSON.parse(content.drugs);
+                    document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+                    document.getElementById('get_drug_previous').setAttribute('class', 'menu-shop-btn')
+                    document.getElementById('get_drug_next').setAttribute('class', 'menu-shop-btn')
+                    $('#drugs_table tbody tr').remove()
+                    if (page_num == content.total_page) {
+                        document.getElementById('get_drug_next').setAttribute('disabled', true)
+                        document.getElementById('get_drug_next').setAttribute('class', '')
+                        $('#get_drug_previous').removeAttr('disabled')
+                        // console.log('@@@@@@@@@@@@@');
+                    }
+                    if (page_num == 1) {
+                        document.getElementById('get_drug_previous').setAttribute('disabled', true)
+                        document.getElementById('get_drug_previous').setAttribute('class', '')
+                        $('#get_drug_next').removeAttr('disabled')
+                    }
+                    var btn_edit = '<button type="button" onclick="edite_drug(this)" ; class="btn"> <i class="icon-edit"> </i> </button>'
+                    var btn_del = '<button type="button" onclick="delete_drug(this)" ; class="btn"> <i class="icon-close"> </i> </button>'
+                    if ($('#drugs_table tbody').length == 0) {
+                        $('#drugs_table tbody').append("<tbody></tbody>");
+                    }
+
+                    else {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length > 1) {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length >= 2) {
+                        $("#drugs_table tr:last").remove();
+                    }
+                    for (var i in arr) {
+                        $('#drugs_table tbody').append("<tr>" +
+                            "<td>" + arr[i][3] + "</td>" +
+                            "<td>" + arr[i][4] + "</td>" +
+                            "<td class='product'><a>" + arr[i][0] + "</a> <span class='small'>" + arr[i][1] + "</span></td>" +
+                            "<td> ₦" + arr[i][2] + "</td>" +
+                            "<td>" + btn_edit + "</td>" +
+                            "<td>" + btn_del + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                }
+                else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: content.error,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            }
+        })
+    }
+
+    get_drugs_table();
+
+
+    function medication_drug_sec_delete() {
+        delete_via_modification()
+    }
+
+    function delete_via_modification() {
+        var ill = document.getElementById('medication_drug_form_select').value;
+        Swal.fire({
+            title: 'Deleting ' + ill + ' 🤷️?',
+            text: "You are just about to delete the " + ill + " medication!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "receipt_home:delete_prescription_via_ajax" %}',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    data: {
+                        illness: ill.trim()
+                    },
+                    success: function (content) {
+                        if (content.data) {
+                            // medication_drug_form_select
+                            clear_pre()
+                            $("#medication_drug_form_select option[value='" + ill + "']").remove();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+
+                        }
+                    }
+                });
+            }
+        })
+
+    }
+
+
+    let drugs_arry_finali = []
+    let drugs_arry_finali_table = []
+    let drugs_arry = []
+    var drugs_arry_final = 0;
+    function get_drugs() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (content) {
+                drugs_arry = JSON.parse(content.drugs);
+            }
+        });
+        let arr = []
+        arr.length = 0;
+        for (var i in drugs_arry) {
+            arr.push(drugs_arry[i][0])
+        }
+        drugs_arry_finali = arr
+        // drugs_arry_final = arr
+    }
+    get_drugs();
+
+    product_qty = 0;
+    product_total_cost = 0;
+
+    $("#add_drug_form").submit(function (e) {
+        e.preventDefault();
+        if (isNaN($('#drug_amount').val())) {
+            console.log('Error');
+        }
+        else {
+            if (update_drug == true) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "receipt_home:update_drug_ajax" %}',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    data: {
+                        'drug_cs': c_s,
+                        'drug_name': $('#drug_name').val().trim(),
+                        'drug_amount': $('#drug_amount').val().trim(),
+                        'drug_description': $('#drug_description').val().trim(),
+                        'drug_test': drug_test
+                    },
+                    success: function (content) {
+                        if (content.data) {
+                            var c_s = ''
+                            update_drug = false
+                            get_drugs_table();
+                            document.getElementById('add_drug_button').innerHTML = 'Add Drug'
+                            document.getElementById('add_drug_form').reset()
+                            document.getElementById('drug_test_header_one').innerHTML = 'Add '
+                            
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    }
+                })
+            }
+            if (update_drug == false) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "receipt_home:add_drug_ajax" %}',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    data: {
+                        'drug_name': $('#drug_name').val().trim(),
+                        'drug_amount': $('#drug_amount').val().trim(),
+                        'drug_description': $('#drug_description').val().trim(),
+                        'drug_test': drug_test
+                    },
+                    success: function (content) {
+                        if (content.data) {
+                            get_drugs_table();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $("#medication_drug_form").submit(function (e) {
+        e.preventDefault();
+        get_drugs();
+        var amt = $('#drug-pre-amount').val().trim()
+        if (isNaN(amt)) {
+            console.log('Error');
+        }
+        else {
+            var btn_clear = "<button type='button' class='btn' onclick='productDelete(this)'>  <i class='icon-close'> </i> </button>";
+            $("#illness").attr("disabled", true);
+            $("#medication_drug_sec").attr("disabled", true);
+            $("#medication_drug_sec_loading").removeAttr("hidden");
+            $("#medication_drug_sec_default").attr("hidden", true);
+
+            if ($('#input-medication tbody').length == 0) {
+                $('#input-medication tbody').append("<tbody></tbody>");
+                $("#medication_options").attr("hidden", true);
+            }
+
+            if ($('#input-medication tbody').length > 1) {
+                $("#medication_options").removeAttr("hidden");
+            }
+
+            // console.log($('#input-medication tbody').length);
+
+            if (document.getElementById("input-medication").rows.length > 1) {
+                $("#medication_options").removeAttr("hidden");
+            }
+
+            if (document.getElementById("input-medication").rows.length >= 2) {
+                $("#input-medication tr:last").remove();
+            }
+
+            var drug_searched = $('#drug-search').val().trim()
+            var num = 0
+            var cont = true
+            for (var i in drugs_arry) {
+                if (drugs_arry[i][0] === drug_searched) {
+                    num = drugs_arry[i][1];
+                }
+            }
+            
+            if(num === 0) {
+                cont = false
+            }
+            if (amt <= 1) {
+                amt = 1
+            }
+            var cost = amt * num
+            if (cont === true) {
+                $('#input-medication tbody').append("<tr>" +
+                    "<td>" + amt + " x</td>" +
+                    "<td>" + drug_searched + "</td>" +
+                    "<td> ₦" + cost + "</td>" +
+                    "<td>" + btn_clear + "</td>" +
+                    "</tr>"
+                );
+
+                product_qty = parseInt(product_qty) + parseInt(amt);
+                product_total_cost = parseInt(product_total_cost) + parseInt(cost);
+
+                $('#input-medication tbody').append("<tr>" +
+                    "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+                    // "<td></td>" +
+                    "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                    "</tr>"
+                );
+                $("#medication_drug_sec").removeAttr("disabled");
+                $("#medication_drug_sec_default").removeAttr("hidden");
+                $("#medication_drug_sec_loading").attr("hidden", true);
+                $('#drug-search').focus();
+                document.getElementById('drug-search').value = "";
+            }
+            else {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'info',
+                    title: drug_searched + ' is not stored in the system',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                $("#medication_drug_sec").removeAttr("disabled");
+                // $("#medication_options").attr("hidden", true);
+                $("#medication_drug_sec_default").removeAttr("hidden");
+                $("#medication_drug_sec_loading").attr("hidden", true);
+                $('#drug-search').focus();
+                // clear_pre();
+            }
+        }
+    });
+
+    function productDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if (document.getElementById("input-medication").rows.length == 2) {
+            // document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
+            $("#input-medicationtable tbody tr").remove()
+
+            $("#medication_options").attr("hidden", true);
+            $("#illness_add").removeAttr("disabled");
+        }
+        for (let element of tablejson('#input-medication')) {
+            product_qty = 0
+            product_total_cost = 0
+            product_qty = parseInt(product_qty) + parseInt(element.quantity.replace('x', "").trim());
+            product_total_cost = parseInt(product_total_cost) + parseInt(element.subtotal.replace('₦', "").trim());
+        }
+        if (document.getElementById("input-medication").rows.length > 2) {
+            document.getElementById('total-amount-medication').innerHTML = product_total_cost;
+            document.getElementById('total-quantity-medication').innerHTML = product_qty;
+        }
+    }
+    var update_drug = false
+    var c_s = ''
+
+    function edite_drug(ctl) {
+        var tbl = $(ctl).parents("tr").get().map(function (row) {
+            return $(row).find("td").get().map(function (cell) {
+                return $(cell).html();
+            });
+        });
+        for (var i in tbl) {
+            // console.log(tbl[i][0]);
+            c_s = tbl[i][0]
+        }
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:update_drug_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                'drug_cs': c_s,
+            },
+            success: function (content) {
+                if (content.data) {
+                    // console.log('Success');
+                    update_drug = true
+                    document.getElementById('c_s_drug_name').value = c_s
+                    document.getElementById('drug_name').value = content.drug_name
+                    document.getElementById('drug_amount').value = content.drug_amount
+                    document.getElementById('drug_description').value = content.drug_description
+                    document.getElementById('drug_test_header_one').innerHTML = 'Update '
+
+                    if (content.drug_test === 'Drug') {
+                        document.getElementById('drug_name_insert').checked = 'Drug'
+                        document.getElementById('add_drug_button').innerHTML = 'Update Drug'
+                    }
+                    if (content.drug_test === 'Test') {
+                        document.getElementById('test_name_insert').checked = 'Test'
+                        document.getElementById('add_drug_button').innerHTML = 'Update Test'
+                    }
+
+                    // document.getElementById('drug_description').checked 
+                    // $('#c_s_drug_name').val() = c_s
+                    // $('#drug_name').val() = content.drug_name
+                    // $('#drug_amount').val() = content.drug_amount
+                    // $('#drug_description').val() = content.drug_description
+                }
+                else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: content.error,
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            }
+        })
+    }
+
+    function search_for_drug_for_table() {
+         $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_textbox_drug_table_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                'drug_search': document.getElementById('search_for_drug_for_table').value,
+            },
+            success: function (content) {
+                if (content.data) {
+                    var arr = JSON.parse(content.drugs);
+                    document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+                    document.getElementById('get_drug_previous').setAttribute('class', 'menu-shop-btn')
+                    document.getElementById('get_drug_next').setAttribute('class', 'menu-shop-btn')
+                    var btn_edit = '<button type="button" onclick="edite_drug(this)" ; class="btn"> <i class="icon-edit"> </i> </button>'
+                    var btn_del = '<button type="button" onclick="delete_drug(this)" ; class="btn"> <i class="icon-close"> </i> </button>'
+                    if (page_num == content.total_page) {
+                        document.getElementById('get_drug_next').setAttribute('disabled', true)
+                        document.getElementById('get_drug_next').setAttribute('class', '')
+                        $('#get_drug_previous').removeAttr('disabled')
+                    }
+                    if (page_num == 1) {
+                        document.getElementById('get_drug_previous').setAttribute('disabled', true)
+                        document.getElementById('get_drug_previous').setAttribute('class', '')
+                        $('#get_drug_next').removeAttr('disabled')
+                    }
+
+                    if ($('#drugs_table tbody').length == 0) {
+                        $('#drugs_table tbody').append("<tbody></tbody>");
+                    }
+
+                    else {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length > 1) {
+                        $("#drug_display_table").removeAttr("hidden");
+                    }
+
+                    if (document.getElementById("drugs_table").rows.length >= 2) {
+                        $("#drugs_table tr:last").remove();
+                    }
+                    $('#drugs_table tbody tr').remove()
+                    for (var i in arr) {
+                        $('#drugs_table tbody').append("<tr>" +
+                            "<td>" + arr[i][3] + "</td>" +
+                            "<td>" + arr[i][4] + "</td>" +
+                            "<td class='product'><a>" + arr[i][0] + "</a> <span class='small'>" + arr[i][1] + "</span></td>" +
+                            "<td> ₦" + arr[i][2] + "</td>" +
+                            "<td>" + btn_edit + "</td>" +
+                            "<td>" + btn_del + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                }
+
+
+                // if (content.data) {
+                //     c_s = ''
+                //     drug = ''
+                //     Swal.fire({
+                //         position: 'top-end',
+                //         icon: 'success',
+                //         title: content.success,
+                //         showConfirmButton: false,
+                //         timer: 2000
+                //     })
+
+                // }
+                // else {
+                //     Swal.fire({
+                //         position: 'top-end',
+                //         icon: 'error',
+                //         title: content.error,
+                //         showConfirmButton: false,
+                //         timer: 2000
+                //     })
+                // }
+            }
+        })
+    }
+
+    function delete_drug(ctl) {
+        var tbl = $(ctl).parents("tr").get().map(function (row) {
+            return $(row).find("td").get().map(function (cell) {
+                return $(cell).html();
+            });
+        });
+        var c_s = ''
+        var drug = ''
+        console.log(tbl);
+        for (var i in tbl) {
+            console.log(tbl[i][1]);
+            c_s = tbl[i][0]
+            drug = tbl[i][2]
+        }
+        Swal.fire({
+            title: 'Deleting ' + drug + ' 🤷️?',
+            // text: "You are just about to delete the " + drug + " drug!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "receipt_home:delete_drug_ajax" %}',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    data: {
+                        'drug_cs': c_s,
+                    },
+                    success: function (content) {
+                        if (content.data) {
+                            $(ctl).parents("tr").remove()
+                            c_s = ''
+                            drug = ''
+                            get_drugs_table();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+
+    function clear_pre() {
+        // document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
+        $("#input-medicationtable tbody tr").remove()
+
+        $("#medication_options").attr("hidden", true);
+        $("#illness").removeAttr("disabled");
+        document.getElementById('illness').focus();
+        document.getElementById('illness').value = '';
+        // document.getElementById('medication_drug_form').reset();
+        product_qty = 0
+        product_total_cost = 0
+
+    }
+
+    function clear_pre_() {
+        if (update) {
+            delete_via_modification()
+        }
+        else {
+            // document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
+            $("#input-medicationtable tbody tr").remove()
+
+            $("#medication_options").attr("hidden", true);
+            $("#illness_add").removeAttr("disabled");
+            document.getElementById('illness').focus();
+            product_qty = 0
+            product_total_cost = 0
+
+        }
+    }
+
+
+    function tablejson(tableid) {
+        var table = $(tableid).tableToJSON({
+            ignoreColumns: [4],
+            headings: ['quantity', 'product', 'subtotal']
+        });
+        table.splice(0, 1);
+        table.splice(table.length - 1, 1);
+        return table;
+    }
+
+    function save_pre() {
+        // $("#illness").attr("disabled", true);
+        // $("#save-medication-table").attr("disabled", true);
+        // $("#medication_drug_sec_loading").removeAttr("hidden");
+        // $("#medication_drug_sec_default").attr("hidden", true);
+        var ajax_pass = false
+        var ill = $('#illness').val().trim()
+        if (update) {
+            Swal.fire({
+                title: 'Done modifying ' + ill + '?',
+                text: "Yes I want to update the " + ill + " medication!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#00B092',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Update!'
+            }).then((result) => {
+                if (result.value) {
+                    table = tablejson('#input-medication');
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url "receipt_home:add_catalog_ajax" %}',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        dataType: 'json',
+                        data: {
+                            updatable: update,
+                            illness: ill,
+                            table: JSON.stringify(table)
+                        },
+                        success: function (content) {
+                            if (content.data) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: content.success,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: content.error,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'All Done?',
+                text: "Yes I want to save the " + ill + " medication!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#00B092',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Add!'
+            }).then((result) => {
+                if (result.value) {
+                    table = tablejson('#input-medication');
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url "receipt_home:add_catalog_ajax" %}',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        dataType: 'json',
+                        data: {
+                            updatable: false,
+                            illness: ill,
+                            table: JSON.stringify(table)
+                        },
+                        success: function (content) {
+                            if (content.data) {
+                                clear_pre()
+                                $('#medication_drug_form_select').append($('<option>', { value: ill }).text(ill))
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: content.success,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: content.error,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        }
+    }
+
+
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    $('#drug-search_add').focus(function () {
+        get_drugs();
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("drug-search_add"), drugs_arry_finali);
+    })
+
+    $('#drug-search').focus(function () {
+        get_drugs();
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("drug-search"), drugs_arry_finali);
+    })
+
+
+    $('#drug-search_mod').focus(function () {
+        get_drugs();
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("drug-search_mod"), drugs_arry_finali);
+    })
+
+</script>
+
+{% endblock javascript %}

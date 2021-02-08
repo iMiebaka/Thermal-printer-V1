@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block head_title %}- Login {% endblock %}
+
+{% block page_content %}
+<!-- Enter Asserts -->
+<section class=" animatedParent animateOnce">
+    <div class="container padding-bottom-none entrance-center">
+        <div class="section-content">
+            <div class="row">
+                <!-- <div class="col-md-6">
+                        <img class="animated fadeInLeftShort slow delay-500 booking-cantact-img" src="img/bg/c1.png" alt="">
+                    </div> -->
+                <div class="bg-f8 padding-tb margin-bottom-80 animated fadeInRightShort slow delay-500">
+                    <div class="booking-from">
+                        <h2>Sign<span class="color-defult">in</span></h2>
+                        <div class="border-style-2 margin-bottom-30"></div>
+                        <p class="margin-bottom-30">Enter Username and Password</p>
+                        <form method="POST" action="{% url 'accounts:login' %}" id="hospital_app">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" name="username" id="username" class="form-control"
+                                        placeholder="Username" required>
+                                </div>
+                                <div class="col-md-6 margin-bottom-20">
+                                    <div class="input-group">
+                                        <input type="password" id="pass" name="your_pass"
+                                            class="form-control form-control-lg pwd" placeholder="Password" required/>
+                                        <span class="input-group-btn"> <button type="button"
+                                                class="form-control form-control-lg btn btn-default reveal"> <span
+                                                    class="mx-1 icon-eye" id="password_symbol"></span>
+                                            </button></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="contact-textarea">
+                                        <button class="btn btn-theme" id="login" type="submit" value="Submit Form"> Sign in</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- appointment end -->
+{% endblock page_content %}
+
+{% block javascript %}
+<script>
+    $("#username").focus();
+    $(".reveal").on('click', function () {
+        var $pwd = $(".pwd");
+        var $symbol = $("#password_symbol")
+        if ($pwd.attr('type') === 'password') {
+            $pwd.attr('type', 'text');
+            $symbol.attr('class', 'mx-1 icon-visibility_off')
+        }
+        else {
+            $pwd.attr('type', 'password');
+            $symbol.attr('class', 'mx-1 icon-eye')
+        }
+    });
+    
+    $("#username").change(function () {
+        var username = $(this).val();
+        $.ajax({
+            url: '{% url "accounts:validate_username" %}',
+            data: {
+                'username': username,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (!data.is_taken) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'This username does not exist',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $("#login").attr("disabled", true);
+                }
+                else {
+                    $('#login').removeAttr("disabled");
+                }
+
+
+            }
+        });
+    });
+
+</script>
+
+{% endblock javascript %}
