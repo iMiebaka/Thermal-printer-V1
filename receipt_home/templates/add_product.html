@@ -155,7 +155,7 @@
                                         </div>
                                     </button>
 
-                                    <button type="submit" style="height: 44px; width: 65px;"
+                                    <button style="height: 44px; width: 65px;"
                                         id="medication_drug_sec_delete" class="btn btn-danger"
                                         onclick=medication_drug_sec_delete()>
                                         <div id="medication_drug_sec_default_delete">
@@ -166,11 +166,11 @@
                                         </div>
                                     </button>
                                 </div>
-
                             </div>
+
                             <div class="col-md-6">
                                 <select name="medication_drug_form_select" id="medication_drug_form_select"
-                                    class="form-control" style="height: 45px;" disabled>
+                                    class="form-control col-md-6" style="height: 45px;" disabled>
                                     <option value="" disabled selected>Select Prescription to modify
                                     </option>
                                     {% for illment in illments %}
@@ -322,92 +322,6 @@
         }
     }
 
-    // function medication_drug_sec_edit() {
-    //     var ill = document.getElementById('medication_drug_form_select').value;
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '{% url "receipt_home:get_drugs_via_prescription_ajax" %}',
-    //         headers: {
-    //             'X-CSRFToken': '{{ csrf_token }}'
-    //         },
-    //         dataType: 'json',
-    //         data: {
-    //             illness: $('#medication_drug_form_select').val().trim()
-    //         },
-    //         success: function (content) {
-    //             if (content.data) {
-    //                 var arr = JSON.parse(content.drugs);
-    //                 var btn_clear = "<button type='button' class='btn' onclick='productDelete(this)'>  <i class='icon-close'> </i> </button>";
-    //                 document.getElementById('illness').value = ill;
-    //                 $("#illness").attr("disabled", true);
-
-    //                 if ($('#input-medication tbody').length == 0) {
-    //                     $('#input-medication tbody').append("<tbody></tbody>");
-    //                     $("#medication_options").attr("hidden", true);
-    //                 }
-
-    //                 else {
-    //                     $("#medication_options").removeAttr("hidden");
-    //                 }
-
-    //                 if (document.getElementById("input-medication").rows.length > 1) {
-    //                     $("#medication_options").removeAttr("hidden");
-    //                 }
-
-    //                 if (document.getElementById("input-medication").rows.length >= 2) {
-    //                     $("#input-medication tr:last").remove();
-    //                 }
-
-    //                 // document.querySelectorAll("input-medicationtable tbody tr").forEach(function (e) { e.remove() })
-    //                 $("#input-medicationtable tbody tr").remove()
-    //                 product_qty = 0;
-    //                 product_total_cost = 0;
-
-    //                 for (var i in arr) {
-    //                     var amt = ''
-    //                     var drug_searched = ''
-    //                     var cost = ''
-    //                     var num = 0
-    //                     var total = 0
-    //                     var total_amt = 0
-    //                     for (var j in drugs_arry) {
-    //                         if (drugs_arry[j][0] === drug_searched) {
-    //                             num = drugs_arry[j][1];
-    //                         }
-    //                     }
-    //                     drug_searched = arr[i][0]
-    //                     amt = arr[i][2]
-    //                     cost = arr[i][1]
-    //                     // console.log(drug_searched + " " + cost + " " + amt);
-    //                     var sn_amt = (amt * cost)
-    //                     $('#input-medication tbody').append("<tr>" +
-    //                         "<td>" + amt + " x</td>" +
-    //                         "<td>" + drug_searched + "</td>" +
-    //                         "<td> ₦" + sn_amt + "</td>" +
-    //                         "<td>" + btn_clear + "</td>" +
-    //                         "</tr>"
-    //                     );
-    //                     product_qty = parseInt(product_qty) + parseInt(amt);
-    //                     product_total_cost = parseInt(product_total_cost) + parseInt(sn_amt);
-    //                 }
-
-    //                 $('#input-medication tbody').append("<tr>" +
-    //                     "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
-    //                     // "<td></td>" +
-    //                     "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
-    //                     "</tr>"
-    //                 );
-
-    //                 // $("#medication_options").removeAttr("hidden");
-    //             }
-    //             else {
-    //                 console.log(content.error);
-    //             }
-    //         }
-    //     });
-    // }
-
-
     function medication_drug_sec_edit() {
         var ill = document.getElementById('medication_drug_form_select').value;
         $.ajax({
@@ -480,7 +394,7 @@
                     $('#input-medication tbody').append("<tr>" +
                         "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
                         // "<td></td>" +
-                        "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                        "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</strong></td>" +
                         "</tr>"
                     );
 
@@ -946,7 +860,7 @@
                 $('#input-medication tbody').append("<tr>" +
                     "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
                     // "<td></td>" +
-                    "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                    "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</strong></td>" +
                     "</tr>"
                 );
                 $("#medication_drug_sec").removeAttr("disabled");
