@@ -517,6 +517,7 @@
                     document.getElementById('get_drug_next').setAttribute('class', 'menu-shop-btn')
                     var btn_edit = '<button type="button" onclick="edite_drug(this)" ; class="btn"> <i class="icon-edit"> </i> </button>'
                     var btn_del = '<button type="button" onclick="delete_drug(this)" ; class="btn"> <i class="icon-close"> </i> </button>'
+                    $('#get_drug_previous').removeAttr('disabled')
                     if (page_num == content.total_page) {
                         document.getElementById('get_drug_next').setAttribute('disabled', true)
                         document.getElementById('get_drug_next').setAttribute('class', '')
@@ -632,7 +633,7 @@
     function get_drugs_table() {
         $.ajax({
             type: 'GET',
-            url: '{% url "receipt_home:search_drug_table_ajax" %}',
+            url: '{% url "receipt_home:search_textbox_drug_test_ajax" %}',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             },
@@ -779,6 +780,7 @@
         arr.length = 0;
         for (var i in drugs_arry) {
             arr.push(drugs_arry[i][0])
+            console.log(drug_arry[i][0]);
         }
         drugs_arry_finali = arr
         // drugs_arry_final = arr
@@ -1034,11 +1036,6 @@
                         document.getElementById('add_drug_button').innerHTML = 'Update Test'
                     }
 
-                    // document.getElementById('drug_description').checked 
-                    // $('#c_s_drug_name').val() = c_s
-                    // $('#drug_name').val() = content.drug_name
-                    // $('#drug_amount').val() = content.drug_amount
-                    // $('#drug_description').val() = content.drug_description
                 }
                 else {
                     Swal.fire({
@@ -1205,7 +1202,7 @@
 
     function clear_pre() {
         // document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
-        $("#input-medicationtable tbody tr").remove()
+        $("#input-medication tbody tr").remove()
 
         $("#medication_options").attr("hidden", true);
         $("#illness").removeAttr("disabled");
@@ -1223,7 +1220,7 @@
         }
         else {
             // document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
-            $("#input-medicationtable tbody tr").remove()
+            $("#input-medication tbody tr").remove()
 
             $("#medication_options").attr("hidden", true);
             $("#illness_add").removeAttr("disabled");

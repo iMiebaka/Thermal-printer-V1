@@ -7,40 +7,49 @@
 <section class=" animatedParent animateOnce">
     <div class="container padding-bottom-none entrance-center">
         <div class="section-content">
-            <div class="row">
-                <!-- <div class="col-md-6">
-                    <img class="animated fadeInLeftShort slow delay-500 booking-cantact-img" src="img/bg/c1.png" alt="">
-                    </div> -->
-                <div class="bg-f8 padding-tb margin-bottom-80 animated fadeInRightShort slow delay-500">
-                    <div class="booking-from">
-                        <h2>PRO<span class="color-defult">FILE</span></h2>
-                        <div class="border-style-2 margin-bottom-30"></div>
-                        <!-- <p class="margin-bottom-30">Enter Username and Password to Signup</p> -->
-                        <form method="post" action="#">
-                            {% csrf_token %}
-                            <div class="row">
+            <div class="padding-tb margin-bottom-80 animated fadeInRightShort slow delay-500">
+                <div class="booking-from">
+                    <h2>PRO<span class="color-defult">FILE</span></h2>
+                    <div class="border-style-2 margin-bottom-30"></div>
+                    <!-- <p class="margin-bottom-30">Enter Username and Password to Signup</p> -->
+                    <form method="post" id="edit_profile" action="{% url 'accounts:view_profile' %}"
+                        modelAttribute="api" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="col-md-12">
-                                    <input type="text" name="name" id="username" class="form-control"
-                                        placeholder="Username" required>
+                                    <input type="text" name="username" id="username" class="form-control col-md-6"
+                                        placeholder="Change Username">
                                 </div>
                                 <div class="col-md-12 margin-bottom-20">
                                     <div class="input-group">
-                                        <input type="password" id="pass" name="your_pass" class="form-control"
-                                            placeholder="Password" required>
-                                        <span class="input-group-btn"> <button type="button"
-                                                class="form-control form-control-lg btn btn-default reveal"> <span
-                                                    class="mx-1 icon-eye" id="password_symbol"></span>
-                                            </button></span>
+                                        <input type="password" id="pass" name="your_pass" class="form-control col-md-6"
+                                            placeholder="Change Password">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="form-control btn btn-default reveal">
+                                                <span class="mx-1 icon-eye" id="password_symbol"></span>
+                                            </button>
+                                        </span>
                                     </div>
                                 </div>
+                                <div class="col-md-12 margin-bottom-20">
+                                    <input type="file" accept="image/*" name="cover_image"
+                                        class="form-control col-md-6">
+                                </div>
                                 <div class="col-md-12">
-                                    <!-- <div class="contact-textarea"> -->
-                                    <button class="btn btn-theme" type="submit" value="Submit Form">Signup</button>
-                                    <!-- </div> -->
+                                    <button class="btn btn-theme" type="submit" value="Submit Form">
+                                        <div id="save_button_loading" hidden>
+                                            <div class="loader"></div>
+                                        </div>
+                                        
+                                        <div style="margin: 5px;">
+                                            <span class="mx-1 icon-save" id="save_submit_symbol"></span>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -53,7 +62,7 @@
 <script>
     $("#username").focus();
     $(".reveal").on('click', function () {
-        var $pwd = $(".pwd");
+        var $pwd = $("#pass");
         var $symbol = $("#password_symbol")
         if ($pwd.attr('type') === 'password') {
             $pwd.attr('type', 'text');
@@ -64,6 +73,34 @@
             $symbol.attr('class', 'mx-1 icon-eye')
         }
     });
+
+    $('#edit_profile').submit(function (e) {
+        $('#save_submit_symbol').attr('class', '')
+        $('#save_button_loading').removeAttr('hidden')
+    })
+
+    '{% if messages %}'
+    '{% for message in messages %}'
+    var tag_alert = '{{ message.tags }}';
+
+    if (tag_alert == 'alert-success') {
+        tag_alert = 'success';
+    }
+    if (tag_alert == 'alert-danger') {
+        tag_alert = 'error';
+    }
+    if (tag_alert == 'alert-info') {
+        tag_alert = 'info';
+    }
+    Swal.fire({
+        position: 'top-end',
+        icon: tag_alert,
+        title: '{{ message }}',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    '{% endfor %}'
+    '{% endif %}'
 </script>
 
 {% endblock javascript %}
