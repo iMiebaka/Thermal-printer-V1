@@ -117,9 +117,8 @@ def view_profile(request):
 @login_required
 def search_user_ajax(request):
     try:
-        user = User.objects.filter(is_staff=False).values().values_list('username')
+        user = User.objects.filter().exclude(username=request.user).values().values_list('username')
         users = json.dumps(list(user))
-        print(users)
         content = {
             'data': True,
             'users': users

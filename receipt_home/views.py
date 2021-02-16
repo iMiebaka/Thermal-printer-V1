@@ -319,14 +319,16 @@ def search_drug_prescription_ajax(request):
 
 @login_required
 def search_drug_table_ajax(request):
-    data = request.GET.get('data', None)
+    # global export_var_check
+    # export_var_check = in_search
+    data_one = request.GET.get('data_one', None)
+    data_two = request.GET.get('data_two', None)
     in_search = request.GET.get('in_search', None)
-    global export_var_check
-    export_var_check = in_search
     pag_num_amount = 10
+
     if in_search == 'one':
         try:
-            history = History.objects.filter(created_on__date=data)
+            history = History.objects.filter(created_on__date=data_one)
             total_page = history.count()
             history = history.values().values_list('qty','product','received_by__username', 'created_on__day', 'created_on__month', 'created_on__year',  'issued_by__username','mode_of_payment', 'amount')
             page = request.GET.get('page', 1)
@@ -366,10 +368,9 @@ def search_drug_table_ajax(request):
 
     if in_search == 'one.five':
         try:
-            data_two = request.GET.get('data_two', None)
             date_list = []
-            date1 = datetime.strptime(data_two, '%Y-%m-%d')
-            date2 = datetime.strptime(data, '%Y-%m-%d') 
+            date1 = datetime.strptime(data_one, '%Y-%m-%d')
+            date2 = datetime.strptime(data_two, '%Y-%m-%d') 
             for dt in daterange(date1, date2):
                 date_list.append(dt.strftime('%Y-%m-%d'))
             history = History.objects.filter(created_on__date__in=date_list)
@@ -412,7 +413,7 @@ def search_drug_table_ajax(request):
 
     if in_search == 'two':
         try:
-            history = History.objects.filter(issued_by__username__icontains=data) | History.objects.filter(received_by__username__icontains=data) | History.objects.filter(product__icontains=data) 
+            history = History.objects.filter(issued_by__username__icontains=data_one) | History.objects.filter(received_by__username__icontains=data_one) | History.objects.filter(product__icontains=data_one) 
             total_page = history.count()
             history = history.values().values_list('qty','product','received_by__username', 'created_on__day', 'created_on__month', 'created_on__year',  'issued_by__username','mode_of_payment', 'amount')
             page = request.GET.get('page', 1)

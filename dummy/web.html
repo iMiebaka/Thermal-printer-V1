@@ -164,3 +164,357 @@ $("#medication_drug_form_mod_").submit(function (e) {
 
 
 </script>
+
+
+if (content.data) {
+    if (document.getElementById("history_table").rows.length >= 1) {
+        $("#history_table tbody tr:last").remove();
+    }
+
+    document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+    var curent_date = ''
+    var curent_name = ''
+    if (page_num === content.total_page) {
+        document.getElementById('download_more').setAttribute('disabled', true)
+        document.getElementById('download_more').setAttribute('class', '')
+        document.getElementById('download_more').setAttribute('style', 'border-radius:10px; height: 44px; width: 44px;')
+    }
+    for (var i in JSON.parse(content.history)) {
+        if (curent_date != JSON.parse(content.history)[i][3] && curent_date != '') {
+            // $('#history_table tbody').append("<tr>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "<td>-------------</td>" +
+            //     "</tr>"
+            // );
+            $('#history_table tbody').append("<tr>" +
+                "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                "</tr>"
+            );
+        }
+        else if (curent_name != JSON.parse(content.history)[i][2] && curent_name != '') {
+            // $('#history_table tbody').append("<tr>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "<td></td>" +
+            //     "</tr>"
+            // );
+            $('#history_table tbody').append("<tr>" +
+                "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                "</tr>"
+            );
+        }
+        else {
+            $('#history_table tbody').append("<tr>" +
+                "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                "</tr>"
+            );
+        }
+        curent_date = JSON.parse(content.history)[i][3]
+        curent_name = JSON.parse(content.history)[i][2]
+        product_amount = parseInt(product_amount) + parseInt(JSON.parse(content.history)[i][0])
+        product_cost = parseFloat(product_cost) + parseFloat(JSON.parse(content.history)[i][8])
+    }
+    $('#history_table tbody').append("<tr>" +
+        "<td class='total-quantity' colspan='2'><strong>Total " + product_amount + "x</strong></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td class='total-amount'><strong>₦" + product_cost + "</strong></td>" +
+        "</tr>"
+    );
+}
+
+else {
+    $('#history_table tbody').append("<tr>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td>" + content.error + "</td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "</tr>"
+    );
+}
+
+
+<!-- get_mor_button -->
+page_num = page_num + 1
+if (in_search == 'one') {
+    in_search = 'one'
+    data = $('#date_one').val()
+    $.ajax({
+        type: 'GET',
+        url: '{% url "receipt_home:search_drug_table_ajax" %}',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        dataType: 'json',
+        data: {
+            data: data,
+            in_search: in_search,
+            page: page_num
+        },
+        success: function (content) {
+            if (content.data) {
+                if (document.getElementById("history_table").rows.length >= 1) {
+                    $("#history_table tbody tr:last").remove();
+                }
+
+                document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+                var curent_date = ''
+                var curent_name = ''
+                if (page_num === content.total_page) {
+                    document.getElementById('download_more').setAttribute('disabled', true)
+                    document.getElementById('download_more').setAttribute('class', '')
+                    document.getElementById('download_more').setAttribute('style', 'border-radius:10px; height: 44px; width: 44px;')
+                }
+                for (var i in JSON.parse(content.history)) {
+                    if (curent_date != JSON.parse(content.history)[i][3] && curent_date != '') {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "</tr>"
+                        );
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    else if (curent_name != JSON.parse(content.history)[i][2] && curent_name != '') {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "</tr>"
+                        );
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    else {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    curent_date = JSON.parse(content.history)[i][3]
+                    curent_name = JSON.parse(content.history)[i][2]
+                    product_amount = parseInt(product_amount) + parseInt(JSON.parse(content.history)[i][0])
+                    product_cost = parseFloat(product_cost) + parseFloat(JSON.parse(content.history)[i][8])
+                }
+                $('#history_table tbody').append("<tr>" +
+                    "<td class='total-quantity' colspan='2'><strong>Total " + product_amount + "x</strong></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td class='total-amount'><strong>₦" + product_cost + "</strong></td>" +
+                    "</tr>"
+                )
+            }
+
+            else {
+                $('#history_table tbody').append("<tr>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td>" + content.error + "</td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "</tr>"
+                );
+            }
+        }
+    })
+}
+else if (in_search == 'two') {
+    in_search == 'two'
+}
+else if (in_search == 'one.five') {
+    console.log('@@@@@@@@@@@@');
+    $.ajax({
+        type: 'GET',
+        url: '{% url "receipt_home:search_drug_table_ajax" %}',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        dataType: 'json',
+        data: {
+            // via_date: via_date,
+            data: $('#date_two').val(),
+            data_two: $('#date_one').val(),
+            in_search: in_search,
+            page: page_num
+
+        },
+        success: function (content) {
+            if (content.data) {
+                product_amount = 0
+                product_cost = 0
+                var curent_date = ''
+                var curent_name = ''
+                $('#history_table tbody tr').remove()
+                document.getElementById("table_page_text").innerHTML = page_num + '/' + content.total_page
+
+                if (page_num === content.total_page) {
+                    document.getElementById('download_more').setAttribute('disabled', true)
+                    document.getElementById('download_more').setAttribute('class', '')
+                    document.getElementById('download_more').setAttribute('style', 'border-radius:10px; height: 44px; width: 44px;')
+                }
+                else {
+                    document.getElementById('download_more').setAttribute('class', 'menu-shop-btn')
+                    document.getElementById('download_more').setAttribute('style', 'border-radius:10px; height: 44px; width: 44px;')
+                    $('#download_more').removeAttr('disabled')
+                }
+
+                for (var i in JSON.parse(content.history)) {
+                    if (curent_date != JSON.parse(content.history)[i][3] && curent_date != '') {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "<td>-------------</td>" +
+                            "</tr>"
+                        );
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    else if (curent_name != JSON.parse(content.history)[i][2] && curent_name != '') {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "</tr>"
+                        );
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    else {
+                        $('#history_table tbody').append("<tr>" +
+                            "<td>" + JSON.parse(content.history)[i][0] + "x</td>" +
+                            "<td>" + JSON.parse(content.history)[i][1] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][2] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][3] + "-" + JSON.parse(content.history)[i][4] + "-" + JSON.parse(content.history)[i][5] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][6] + "</td>" +
+                            "<td>" + JSON.parse(content.history)[i][7] + "</td>" +
+                            "<td>₦" + JSON.parse(content.history)[i][8] + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    curent_date = JSON.parse(content.history)[i][3]
+                    curent_name = JSON.parse(content.history)[i][2]
+                    product_amount = parseInt(product_amount) + parseInt(JSON.parse(content.history)[i][0])
+                    product_cost = parseFloat(product_cost) + parseFloat(JSON.parse(content.history)[i][8])
+                }
+                $('#history_table tbody').append("<tr>" +
+                    "<td class='total-quantity' colspan='2'><strong>Total " + product_amount + "x</strong></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td class='total-amount'><strong>₦" + product_cost + "</strong></td>" +
+                    "</tr>"
+                )
+            }
+
+            else {
+                $('#history_table tbody').append("<tr>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td>" + content.error + "</td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "</tr>"
+                );
+            }
+        }
+    })
+    // return true
+}
+else {
+
+    })
+}
