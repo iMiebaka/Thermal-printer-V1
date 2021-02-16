@@ -12,24 +12,58 @@
                     <div class="booking-from">
                         <h2>Issue<span class="color-defult"> Receipt</span></h2>
                         <div class="border-style-2 margin-bottom-30"></div>
-                        <p class="margin-bottom-30">Enter Expenses</p>
+                        <p class="margin-bottom-20">Enter Expenses</p>
                         <form method="post" id="get_expenses_form" action="#">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" name="payment_mode_query" class="btn-check"
+                                            id="cash_payment" autocomplete="off" onclick="handle_radio_click(this);"
+                                            checked>
+                                        <label for="cash_payment">Cash</label>
+
+                                        <input type="radio" name="payment_mode_query" class="btn-check" id="pos_payment"
+                                            autocomplete="off" onclick="handle_radio_click(this);">
+                                        <label for="pos_payment">POS</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                         <input type="radio" name="product_query" class="btn-check" id="test_medic"
                                             autocomplete="off" onclick="handle_radio_click(this);" checked>
-                                        <label for="test_medic">Test | Drug</label>
+                                        <label for="test_medic">Drug</label>
+
+                                        <input type="radio" name="product_query" class="btn-check" id="test_"
+                                            autocomplete="off" onclick="handle_radio_click(this);">
+                                        <label for="test_">Test</label>
+
                                         <input type="radio" name="product_query" class="btn-check" id="treatment"
                                             autocomplete="off" onclick="handle_radio_click(this);">
-                                        <label for="treatment">Treatment</label>
+                                        <label for="treatment">Medication</label>
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <input type="text" name="name" id="product_purchased" class="form-control"
-                                        placeholder="Enter Test" required>
+                                <div class="col-md-8 margin-bottom-10">
+                                    <div class="input-group">
+                                        <input type="text" name="name" id="product_purchased" class="form-control"
+                                            placeholder="Enter Drug" required>
+                                        <span class="input-group-btn"> <button type="button"
+                                                class="form-control btn-danger" id="purchased_page_close"> <span
+                                                    class="mx-1 icon-close" id="x_symbol"></span>
+                                            </button></span>
+
+                                    </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <input type="number" name="name" id="amount_purchased" class="form-control"
+                                        placeholder="Select Amount" value="1" min="1" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" name="receiver_name" id="receiver_name" class="form-control"
+                                        placeholder="Enter name of Receiver..." required>
+                                </div>
+
+
                                 <div class="col-md-12">
                                     <div class="contact-textarea">
                                         <button class="btn btn-theme" type="submit" value="Submit Form">Add to
@@ -41,22 +75,26 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="quantity">QTY</th>
-                                <th class="product">Product</th>
-                                <th class="amount">Subtotal</th>
-                                <th class="amount">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="pos_table">
+                            <thead>
+                                <tr>
+                                    <th class="quantity">QTY</th>
+                                    <th class="product">Product</th>
+                                    <th class="amount">Subtotal</th>
+                                    <th class="amount">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-                    <div class="panel-body text-right" hidden>
-                        <button style="border-radius: 7px;" class="menu-shop-btn-danger">Clear Cart</button>
-                        <button style="border-radius: 7px;" class="menu-shop-btn">Print</button>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-body text-right" id="clear_export_print" hidden>
+                        <button style="border-radius: 7px;" class="menu-shop-btn-danger" onclick=clear_the_cart()>Clear
+                            Cart</button>
+                        <button style="border-radius: 7px;" class="menu-shop-btn" onclick=print_and_save()>Print &
+                            Save</button>
                     </div>
                 </div>
             </div>
@@ -69,28 +107,74 @@
 <script>
     let drugs_arry_finali = []
     let prescription_arry_finali = []
+    let test_arry_finali = []
+    let user_arry_finali = []
     // let drugs_arry_finali_table = []
     // let drugs_arry = []
-    // let prescription_arry = []
+    var product_qty = 0;
+    var product_total_cost = 0
+
+    $("#purchased_page_close").on('click', function () {
+        document.getElementById('product_purchased').value = ''
+    })
 
     function handle_radio_click(product_query) {
         if (document.getElementById('test_medic').checked) {
-            document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Test or Drug')
+            document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Drug')
+            document.getElementById('product_purchased').value = ''
+            $('#amount_purchased').removeAttr("disabled");
 
         }
+
+        if (document.getElementById('test_').checked) {
+            document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Test')
+            document.getElementById('product_purchased').value = ''
+            $('#amount_purchased').removeAttr("disabled");
+        }
+
         if (document.getElementById('treatment').checked) {
             document.getElementById('product_purchased').setAttribute('placeholder', 'Enter Medication')
+            document.getElementById('product_purchased').setAttribute('value', '')
+            $('#amount_purchased').attr("disabled", true);
+            document.getElementById('product_purchased').value = ''
         }
+    }
+
+    function get_users() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "accounts:search_user_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (content) {
+                if (content.data) {
+                    let arr = []
+                    arr.length = 0;
+                    for (var i in JSON.parse(content.users)) {
+                        arr.push(JSON.parse(content.users)[i][0])
+                    }
+                    user_arry_finali = arr
+                }
+                else{
+                    console.log('@@@@@@@@@@@@@');
+                }
+            }
+        });
     }
 
     function get_drugs() {
         $.ajax({
             type: 'GET',
-            url: '{% url "receipt_home:search_drug_ajax" %}',
+            url: '{% url "receipt_home:search_drug_test_ajax" %}',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             },
             dataType: 'json',
+            data: {
+                drug_test: 'Drug'
+            },
             success: function (content) {
                 if (content.data) {
                     let arr = []
@@ -104,7 +188,30 @@
         });
     }
 
-    // get_drugs();
+    function get_test() {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "receipt_home:search_drug_test_ajax" %}',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            data: {
+                drug_test: 'Test'
+            },
+            success: function (content) {
+                if (content.data) {
+                    let arr = []
+                    arr.length = 0;
+                    for (var i in JSON.parse(content.drugs)) {
+                        arr.push(JSON.parse(content.drugs)[i][0])
+                    }
+                    test_arry_finali = arr
+                }
+            }
+        });
+    }
+
 
     function get_pres() {
         $.ajax({
@@ -138,6 +245,11 @@
         }
         if (document.getElementById('treatment').checked) {
             drug_test = 'medication'
+
+        }
+
+        if (document.getElementById('test_').checked) {
+            drug_test = 'Test'
         }
 
         $.ajax({
@@ -153,13 +265,302 @@
             },
             success: function (content) {
                 if (content.data) {
-                    console.log('@@@@@@@@@@@@@@@2');
-                    console.log(JSON.parse(content.drug_test));
+                    //    if (drug_test === 'Test')
+                    //    if (drug_test === 'medication')
+                    var amount = document.getElementById('amount_purchased').value
+                    var btn_clear = "<button type='button' class='btn' onclick='productDelete(this)'>  <i class='icon-close'> </i> </button>";
+                    if (drug_test === 'Test') {
+                        if (content.length > 0) {
+
+                            if ($('#pos_table tbody').length == 0) {
+                                $('#pos_table tbody').append("<tbody></tbody>");
+                                $("#clear_export_print").attr("hidden", true);
+                            }
+
+                            if ($('#pos_table tbody').length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            // console.log($('#pos_table tbody').length);
+
+                            if (document.getElementById("pos_table").rows.length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            if (document.getElementById("pos_table").rows.length >= 2) {
+                                $("#pos_table tbody tr:last").remove();
+                            }
+
+                            for (var i in JSON.parse(content.drug_test)) {
+                                // console.log(JSON.parse(content.drug_test)[i][0]);
+                                var amt_total = amount * JSON.parse(content.drug_test)[i][1]
+                                $('#pos_table tbody').append("<tr>" +
+                                    "<td>" + amount + " x</td>" +
+                                    "<td>" + JSON.parse(content.drug_test)[i][0] + " Test</td>" +
+                                    "<td> ₦" + amt_total + "</td>" +
+                                    "<td>" + btn_clear + "</td>" +
+                                    "</tr>"
+                                );
+                                product_qty = parseInt(product_qty) + parseInt(amount);
+                                product_total_cost = parseInt(product_total_cost) + parseInt(amt_total);
+                            }
+
+                            $('#pos_table tbody').append("<tr>" +
+                                "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+                                // "<td></td>" +
+                                "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                                "</tr>"
+                            );
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    }
+
+                    if (drug_test === 'test_medic') {
+                        if (content.length > 0) {
+
+                            if ($('#pos_table tbody').length == 0) {
+                                $('#pos_table tbody').append("<tbody></tbody>");
+                                $("#clear_export_print").attr("hidden", true);
+                            }
+
+                            if ($('#pos_table tbody').length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            if (document.getElementById("pos_table").rows.length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            if (document.getElementById("pos_table").rows.length >= 2) {
+                                $("#pos_table tbody tr:last").remove();
+
+                            }
+                            for (var i in JSON.parse(content.drug_test)) {
+                                // console.log(JSON.parse(content.drug_test)[i][0]);
+                                var amt_total = amount * JSON.parse(content.drug_test)[i][1]
+                                $('#pos_table tbody').append("<tr>" +
+                                    "<td>" + amount + " x</td>" +
+                                    "<td>" + JSON.parse(content.drug_test)[i][0] + "</td>" +
+                                    "<td> ₦" + amt_total + "</td>" +
+                                    "<td>" + btn_clear + "</td>" +
+                                    "</tr>"
+                                );
+                                product_qty = parseInt(product_qty) + parseInt(amount);
+                                product_total_cost = parseInt(product_total_cost) + parseInt(amt_total);
+                            }
+
+                            $('#pos_table tbody').append("<tr>" +
+                                "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+                                // "<td></td>" +
+                                "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                                "</tr>"
+                            );
+
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    }
+
+
+                    if (drug_test === 'medication') {
+                        if (content.length > 0) {
+                            if ($('#pos_table tbody').length == 0) {
+                                $('#pos_table tbody').append("<tbody></tbody>");
+                                $("#clear_export_print").attr("hidden", true);
+                            }
+
+                            if ($('#pos_table tbody').length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            if (document.getElementById("pos_table").rows.length > 0) {
+                                $("#clear_export_print").removeAttr("hidden");
+                            }
+
+                            if (document.getElementById("pos_table").rows.length >= 2) {
+                                $("#pos_table tbody tr:last").remove();
+
+                            }
+                            for (var i in JSON.parse(content.drug_test)) {
+                                // console.log(JSON.parse(content.drug_test)[i][0]);
+                                var amt_total = JSON.parse(content.drug_test)[i][2] * JSON.parse(content.drug_test)[i][1]
+                                $('#pos_table tbody').append("<tr>" +
+                                    "<td>" + JSON.parse(content.drug_test)[i][2] + " x</td>" +
+                                    "<td>" + JSON.parse(content.drug_test)[i][0] + "</td>" +
+                                    "<td> ₦" + amt_total + "</td>" +
+                                    "<td>" + btn_clear + "</td>" +
+                                    "</tr>"
+                                );
+                                product_qty = parseInt(product_qty) + parseInt(JSON.parse(content.drug_test)[i][2]);
+                                product_total_cost = parseInt(product_total_cost) + parseInt(amt_total);
+                            }
+
+                            $('#pos_table tbody').append("<tr>" +
+                                "<td class='total-quantity' colspan='2'><strong id='total-quantity-medication'>" + product_qty + "</strong> x<strong></strong></td>" +
+                                // "<td></td>" +
+                                "<td class='total-amount'> <strong>₦</strong><strong id='total-amount-medication'>" + product_total_cost + "</strong></td>" +
+                                "</tr>"
+                            );
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    }
+
+                    if (product_qty > 1) {
+                        document.getElementById('total-quantity-medication-cart').innerHTML = 'Total ' + product_qty + ' Item';
+                    }
+                    else if (product_qty === 0) {
+                        document.getElementById('total-quantity-medication-cart').innerHTML = 'No Item';
+                    }
+                    else {
+                        document.getElementById('total-quantity-medication-cart').innerHTML = 'Total ' + product_qty + ' Item';
+                    }
                 }
+                else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: content.error,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+                document.getElementById('product_purchased').value = ''
+                $('#product_purchased').focus()
             }
         });
-
     })
+
+    function tablejson(tableid) {
+        var table = $(tableid).tableToJSON({
+            ignoreColumns: [4],
+            headings: ['quantity', 'product', 'subtotal']
+        });
+        table.splice(0, 1);
+        table.splice(table.length - 1, 1);
+        return table;
+    }
+
+    function print_and_save() {
+        var mode_of_payment = 'Cash'
+        if(document.getElementById('cash_payment').checked){
+            var mode_of_payment = 'Cash'
+        }
+        if(document.getElementById('pos_payment').checked){
+            var mode_of_payment = 'POS'
+        }
+
+        var received_from = document.getElementById("receiver_name").value
+        Swal.fire({
+            title: 'Make Printout?',
+            text: "Yes I want to print and save receipt for "+ received_from,
+            position: 'top-end',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00B092',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Print!'
+        }).then((result) => {
+            if (result.value) {
+                table = tablejson('#pos_table');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "receipt_home:export_and_print" %}',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    data: {
+                        mode_of_payment, mode_of_payment,
+                        received_from: received_from,
+                        table: JSON.stringify(table)
+                    },
+                    success: function (content) {
+                        if (content.data) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: content.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            // clear_the_cart()
+                        }
+                        else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: content.error,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function clear_the_cart() {
+        $("#pos_table tbody tr").remove();
+        $("#clear_export_print").attr("hidden", true);
+        product_qty = 0
+        product_total_cost = 0
+
+    }
+
+    function productDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if (document.getElementById("pos_table").rows.length == 2) {
+            $("#pos_table tbody tr").remove()
+            $("#clear_export_print").attr("hidden", true);
+        }
+
+        product_qty = 0
+        product_total_cost = 0
+        for (let element of tablejson('#pos_table')) {
+            product_qty = parseInt(product_qty) + parseInt(element.quantity.replace('x', "").trim());
+            product_total_cost = parseInt(product_total_cost) + parseInt(element.subtotal.replace('₦', "").trim());
+        }
+        if (document.getElementById("pos_table").rows.length > 2) {
+            document.getElementById('total-amount-medication').innerHTML = product_total_cost;
+            document.getElementById('total-quantity-medication').innerHTML = product_qty;
+            document.getElementById('total-quantity-medication-cart').innerHTML = product_qty;
+        }
+
+        if (product_qty > 1) {
+            document.getElementById('total-quantity-medication-cart').innerHTML = 'Total ' + product_qty + ' Items';
+        }
+        else if (product_qty === 0) {
+            document.getElementById('total-quantity-medication-cart').innerHTML = 'No Item';
+        }
+        else {
+            document.getElementById('total-quantity-medication-cart').innerHTML = 'Total ' + product_qty + ' Item';
+        }
+    }
+
 
     function autocomplete(inp, arr) {
         /*the autocomplete function takes two arguments,
@@ -265,13 +666,26 @@
             autocomplete(document.getElementById("product_purchased"), drugs_arry_finali);
 
         }
+        if (document.getElementById('test_').checked) {
+            get_test()
+            autocomplete(document.getElementById("product_purchased"), test_arry_finali);
+
+        }
         if (document.getElementById('treatment').checked) {
             get_pres()
             autocomplete(document.getElementById("product_purchased"), prescription_arry_finali);
         }
     })
+    
+    $('#receiver_name').focus(function () {
+        get_users()
+        autocomplete(document.getElementById("receiver_name"), user_arry_finali);
+    })
+
+    get_users()
     get_drugs()
     get_pres()
+    get_test()
 </script>
 
 {% endblock javascript %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -35,3 +36,20 @@ class Prescription(models.Model):
 
     def __str__(self):
         return self.treating.name
+
+class History(models.Model):
+    qty = models.CharField(max_length=2)
+    product = models.CharField(max_length=20)
+    mode_of_payment = models.CharField(max_length=5)
+    received_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='payment_by', null=True, on_delete=models.CASCADE)
+    created_on = models.DateTimeField()
+    issued_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='clearance_office', on_delete = models.CASCADE)
+    amount = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.product
+
+    @property
+    def hihi(self):
+        return 'Hello World'
+    
